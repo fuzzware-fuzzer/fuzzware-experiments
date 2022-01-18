@@ -1,0 +1,14 @@
+diff --git a/examples/hello-world/Makefile b/examples/hello-world/Makefile
+index 0a79167ae..bfca2fb4d 100644
+--- a/examples/hello-world/Makefile
++++ b/examples/hello-world/Makefile
+@@ -1,5 +1,9 @@
+ CONTIKI_PROJECT = hello-world
+ all: $(CONTIKI_PROJECT)
+ 
++# Fuzzware: use BLE / BLE's l2cap as MAC layer
++MAKE_MAC = MAKE_MAC_BLE
++
++CFLAGS += -g
+ CONTIKI = ../..
+ include $(CONTIKI)/Makefile.include

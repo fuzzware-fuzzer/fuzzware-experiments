@@ -1,0 +1,16 @@
+diff --git a/samples/bluetooth/peripheral_dis/prj.conf b/samples/bluetooth/peripheral_dis/prj.conf
+index 3b88987ce0..3093ab5e79 100644
+--- a/samples/bluetooth/peripheral_dis/prj.conf
++++ b/samples/bluetooth/peripheral_dis/prj.conf
+@@ -24,3 +24,10 @@ CONFIG_SETTINGS_NONE=y
+ 
+ CONFIG_BT_GATT_DIS_SETTINGS=y
+ CONFIG_BT_GATT_DIS_STR_MAX=21
++
++# Fuzzware: Host-only build
++CONFIG_BT_CTLR=n
++CONFIG_BT_HCI=y
++CONFIG_NET_CONFIG_INIT_TIMEOUT=-1
++
++CONFIG_BT_UART_ON_DEV_NAME="UART_0"
+\ No newline at end of file

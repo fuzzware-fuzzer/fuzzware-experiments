@@ -1,0 +1,27 @@
+#include:
+#  - ./syms.yml
+
+memory_map:
+  mmio: {base_addr:  0x40000000, size: 0x20000000, permissions: rw-}
+  nvic: {base_addr:  0xe0000000, size: 0x10000000, permissions: rw-}
+  irq_ret: {base_addr: 0xfffff000, size: 0x1000, permissions: --x}
+
+  ram:
+    base_addr: 0x20000000
+    permissions: rw-
+    size: 0x60000
+  text:
+    base_addr: 0x8000000
+    file: XML_Parser.bin
+    permissions: r-x
+    size: 0x15000
+  rodata:
+    base_addr: 0x8015000
+    file: XML_Parser.bin
+    file_offset: 0x15000
+    permissions: r--
+    size: 0x10000
+
+# No interrupts used (in uEmu, interrupt is disabled explicitly)
+use_nvic: false
+use_systick: false

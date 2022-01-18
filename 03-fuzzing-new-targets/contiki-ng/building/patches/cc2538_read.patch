@@ -1,0 +1,106 @@
+diff --git a/arch/cpu/cc2538/dev/cc2538-rf.c b/arch/cpu/cc2538/dev/cc2538-rf.c
+index 24a3c636f..23a364851 100644
+--- a/arch/cpu/cc2538/dev/cc2538-rf.c
++++ b/arch/cpu/cc2538/dev/cc2538-rf.c
+@@ -737,96 +737,19 @@ static int
+ read(void *buf, unsigned short bufsize)
+ {
+   uint8_t i;
+-  uint8_t len;
+ 
+-  LOG_INFO("Read\n");
+-
+-  if((REG(RFCORE_XREG_FSMSTAT1) & RFCORE_XREG_FSMSTAT1_FIFOP) == 0) {
+-    return 0;
+-  }
++  uint16_t len;
+ 
+   /* Check the length */
+   len = REG(RFCORE_SFR_RFDATA);
+ 
+   /* Check for validity */
+-  if(len > CC2538_RF_MAX_PACKET_LEN) {
+-    /* Oops, we must be out of sync. */
+-    LOG_ERR("RF: bad sync\n");
+-
+-    CC2538_RF_CSP_ISFLUSHRX();
+-    return 0;
+-  }
+-
+-  if(len <= CC2538_RF_MIN_PACKET_LEN) {
+-    LOG_ERR("RF: too short\n");
+-
+-    CC2538_RF_CSP_ISFLUSHRX();
+-    return 0;
+-  }
+-
+-  if(len - CHECKSUM_LEN > bufsize) {
+-    LOG_ERR("RF: too long\n");
+-
+-    CC2538_RF_CSP_ISFLUSHRX();
+-    return 0;
+-  }
+-
+-  /* If we reach here, chances are the FIFO is holding a valid frame */
+-  LOG_INFO("read (0x%02x bytes) = ", len);
+-  len -= CHECKSUM_LEN;
+-
+-  /* Don't bother with uDMA for short frames (e.g. ACKs) */
+-  if(CC2538_RF_CONF_RX_USE_DMA && len > UDMA_RX_SIZE_THRESHOLD) {
+-    LOG_INFO_("<uDMA payload>");
+-
+-    /* Set the transfer destination's end address */
+-    udma_set_channel_dst(CC2538_RF_CONF_RX_DMA_CHAN,
+-                         (uint32_t)(buf) + len - 1);
+-
+-    /* Configure the control word */
+-    udma_set_channel_control_word(CC2538_RF_CONF_RX_DMA_CHAN,
+-                                  UDMA_RX_FLAGS | udma_xfer_size(len));
+-
+-    /* Enabled the RF RX uDMA channel */
+-    udma_channel_enable(CC2538_RF_CONF_RX_DMA_CHAN);
+-
+-    /* Trigger the uDMA transfer */
+-    udma_channel_sw_request(CC2538_RF_CONF_RX_DMA_CHAN);
+-
+-    /* Wait for the transfer to complete. */
+-    while(udma_channel_get_mode(CC2538_RF_CONF_RX_DMA_CHAN));
+-  } else {
+-    for(i = 0; i < len; ++i) {
+-      ((unsigned char *)(buf))[i] = REG(RFCORE_SFR_RFDATA);
+-      LOG_INFO_("%02x", ((unsigned char *)(buf))[i]);
+-    }
+-  }
+-
+-  /* Read the RSSI and CRC/Corr bytes */
+-  rssi = ((int8_t)REG(RFCORE_SFR_RFDATA)) - RSSI_OFFSET;
+-  crc_corr = REG(RFCORE_SFR_RFDATA);
+-
+-  LOG_INFO_("%02x%02x\n", (uint8_t)rssi, crc_corr);
+-
+-  /* MS bit CRC OK/Not OK, 7 LS Bits, Correlation value */
+-  if(crc_corr & CRC_BIT_MASK) {
+-    packetbuf_set_attr(PACKETBUF_ATTR_RSSI, rssi);
+-    packetbuf_set_attr(PACKETBUF_ATTR_LINK_QUALITY, crc_corr & LQI_BIT_MASK);
+-  } else {
+-    LOG_ERR("Bad CRC\n");
+-    CC2538_RF_CSP_ISFLUSHRX();
+-    return 0;
++  if(len > bufsize) {
++      len = bufsize;
+   }
+ 
+-  if(!poll_mode) {
+-    /* If FIFOP==1 and FIFO==0 then we had a FIFO overflow at some point. */
+-    if(REG(RFCORE_XREG_FSMSTAT1) & RFCORE_XREG_FSMSTAT1_FIFOP) {
+-      if(REG(RFCORE_XREG_FSMSTAT1) & RFCORE_XREG_FSMSTAT1_FIFO) {
+-        process_poll(&cc2538_rf_process);
+-      } else {
+-        CC2538_RF_CSP_ISFLUSHRX();
+-      }
+-    }
++  for(i = 0; i < len; ++i) {
++    ((unsigned char *)(buf))[i] = REG(RFCORE_SFR_RFDATA);
+   }
+ 
+   return len;

@@ -1,0 +1,17 @@
+diff --git a/arch/cpu/cc2538/startup-gcc.c b/arch/cpu/cc2538/startup-gcc.c
+index bde8d1488..36eedad21 100644
+--- a/arch/cpu/cc2538/startup-gcc.c
++++ b/arch/cpu/cc2538/startup-gcc.c
+@@ -312,10 +312,10 @@ reset_handler(void)
+   REG(SYS_CTRL_EMUOVR) = 0xFF;
+ 
+   /* Copy the data segment initializers from flash to SRAM. */
+-  rom_util_memcpy(&_data, &_ldata, &_edata - &_data);
++  memcpy(&_data, &_ldata, &_edata - &_data);
+ 
+   /* Zero-fill the bss segment. */
+-  rom_util_memset(&_bss, 0, &_ebss - &_bss);
++  memset(&_bss, 0, &_ebss - &_bss);
+ 
+   /* call the application's entry point. */
+   main();

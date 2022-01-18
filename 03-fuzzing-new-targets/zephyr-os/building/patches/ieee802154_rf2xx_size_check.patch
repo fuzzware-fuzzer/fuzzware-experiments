@@ -1,0 +1,17 @@
+diff --git a/drivers/ieee802154/ieee802154_rf2xx.c b/drivers/ieee802154/ieee802154_rf2xx.c
+index b697a1024d..f8058d4a3d 100644
+--- a/drivers/ieee802154/ieee802154_rf2xx.c
++++ b/drivers/ieee802154/ieee802154_rf2xx.c
+@@ -203,6 +203,12 @@ static void rf2xx_trx_rx(const struct device *dev)
+ 		return;
+ 	}
+ 
++	// Fuzzware: introduce omitted length check to avoid BOF
++	if (pkt_len + RX2XX_FRAME_HEADER_SIZE + RX2XX_FRAME_FOOTER_SIZE > RX2XX_MAX_FRAME_SIZE) {
++	    pkt_len = RX2XX_MAX_FRAME_SIZE - RX2XX_FRAME_HEADER_SIZE -
++			RX2XX_FRAME_FOOTER_SIZE;
++	}
++
+ 	frame_len = RX2XX_FRAME_HEADER_SIZE + pkt_len +
+ 		    RX2XX_FRAME_FOOTER_SIZE;
+ 

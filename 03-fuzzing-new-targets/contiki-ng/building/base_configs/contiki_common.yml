@@ -1,0 +1,15 @@
+# Performance increase: Make noisy and typical "anti-fuzzing" functions return
+# immediately to avoid consuming unnecessary computation resources.
+handlers:
+  # fade actually takes <a lot> of time (executed basic blocks)
+  fade:
+  lpm_enter:
+  printf:
+
+# We let the fuzzer choose an interrupt to trigger whenever the firmware is idle
+# The default behavior would be to trigger an interrupt every 1000 basic blocks
+interrupt_triggers:
+  idle_interrupt:
+    # Radio interrupt
+    irq: 157
+    addr: platform_idle

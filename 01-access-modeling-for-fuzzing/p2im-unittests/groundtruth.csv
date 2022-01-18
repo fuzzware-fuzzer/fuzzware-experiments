@@ -1,0 +1,67 @@
+File	Testcase	Requirements	Comment
+F103/ARDUINO-F103-Serial.elf	Read	0x800306E	Serial char is present in serial rx buffer and returned successfully
+	Write	_ZN14HardwareSerial5writeEh->_ZN14HardwareSerial16_tx_complete_irqEP8serial_s	Serial write followed by transmission completion callback
+F103/NUTTX-F103-GPIO.elf	Read	0x80074CE	Success case of NUTTX read ioctl
+	Set/Clear	0x80074E4 -> 0x80074E4 	Second write loop iteration indicating write success
+F103/NUTTX-F103-ADC.elf	Read	0x800400A 	Read of sample size (5)-aligned size success case
+F103/NUTTX-F103-I2C.elf	Read	0x80074A8 	Successful output of previously read temperature
+F103/ARDUINO-F103-GPIO_INT.elf	Callback/IRQ	HAL_GPIO_EXTI_IRQHandler	Invocation of GPIO interrupt handler
+F103/ARDUINO-F103-ADC.elf	Read	analogRead->HAL_ADC_GetValue	ADC value reading case of analog read
+F103/NUTTX-F103-GPIO_INT.elf	Callback/IRQ	intHelper	Successfully receiving interrupt-based signal
+F103/NUTTX-SPI.elf	Read	0x800D26A 	Success case of max6675_read function
+F103/ARDUINO-F103-GPIO.elf	Read	HAL_GPIO_ReadPin	Low-level read function in success case of high-level digitalRead
+	Set/Clear	0x80001AC->HAL_GPIO_WritePin->0x80001B6->HAL_GPIO_WritePin	Reaching both button switch states in loop function after another
+F103/ARDUINO-F103-SPI.elf	Read	0x80021DE  || 0x8002142	HAL_SPI_TransmitReceive one of the receive success cases
+	Write	0x080020C0 || 0x800222A	HAL_SPI_TransmitReceive single || multi mode transmit success case
+F103/F103-RIOT-SPI.elf	Read	0x8000FA6 || 0x8000F8E	spi_transfer_bytes in+out or only in mode
+	Write	0x8000F6C || 0x8000F9C	spi_transfer_bytes in+out or only out mode
+F103/NUTTX-USART.elf	Read	0x800757A	Main loop read success case
+	Write	up_send	Serial abstraction write handler
+F103/F103-RIOT-TIMER.elf	Callback/IRQ	timerCB	Invocation of timer callback. Symbol known to IDA as "cb"
+	Read	timer_read	Successfully reading timer value
+F103/ARDUINO-F103-I2C.elf	Read	0x80017C0  || 0x800185a->0x8001870	One byte or two byte read transfer cases of I2C_MasterReceive_BTF
+	Write	0x8001696	Successful transfer case of I2C_MasterTransmit_BTF
+F103/F103-RIOT-USART-Read.elf	Read	_pop	Successful read from receive buffer (which gets filled in IRQ handler)
+F103/F103-RIOT-USART.elf	Write	0x80007D8	Successful write case in uart_write
+F103/F103-RIOT-GPIO_INT.elf	Callback/IRQ	gpioCB	Invocation of gpio callback. Symbol known to IDA as "cb"
+F103/ARDUINO-F103-PWM.elf	Write	TIM_CCxNChannelCmd || TIM_CCxChannelCmd	TIM_PWM || TIMEx_PWMN channel command callback
+F103/F103-RIOT-GPIO.elf	Read	gpio_read	Successful GPIO read command in main loop
+	Set/Clear	gpio_set->gpio_clear	Successive gpio set / clear invocations in main loop
+F103/NUTTX-PWM.elf	Write	helper_finish	Success case in main function after write success checks
+K64F/K64F-RIOT-PWM.elf	Write	0x11A4->0x1096	pwm_set success case->main loop end
+K64F/K64F-RIOT-USART-Read.elf	Read	_pop	Successful read from receive buffer (which gets filled in IRQ handler)
+K64F/K64F-RIOT-USART.elf	Write	0x0D44->0x1168	uart_write success -> main end
+K64F/K64F-RIOT-I2C.elf	Read	0x1684	i2c_irq_handler read case
+	Write	0x1668	i2c_irq_handler write case
+K64F/K64F-RIOT-GPIO_INT.elf	Callback/IRQ	gpioCB	Invocation of callback function
+K64F/K64F-RIOT-TIMER.elf	Callback/IRQ	timerCB	Invocation of callback function. Symbol known to IDA as "cb"
+	Read	0x00001400	timer_read success
+K64F/K64F-RIOT-GPIO.elf	Read	0x10E4	main call gpio_read return
+	Set/Clear	0x10DA->gpio_set	main loop entry -> gpio_set
+K64F/K64F-RIOT-ADC.elf	Read	0x136A->0x10B4	adc_sample -> success case in main loop
+K64F/K64F-RIOT-SPI.elf	Read	0x136C	spi_transfer_bytes MMIO read bb
+	Write	0x1340	spi_transfer_bytes MMIO write bb
+SAM3X/ARDUINO-SAM3-DAC.elf	Write	loop->0x080A62	main loop -> DAC mode output writing after loop
+SAM3X/SAM3-RIOT-GPIO.elf	Read	gpio_read	gpio_read from main
+	Set/Clear	gpio_set	gpio_set from main
+SAM3X/SAM3-RIOT-ADC.elf	Read	0x80ADC->0x080AE8	main loop adc_sample call -> success case
+SAM3X/ARDUINO-SAM3-GPIO.elf	Read	PIO_Get	low-level read function
+	Set/Clear	loop->PIO_SetOutput->PIO_PullUp->PIO_SetOutput	main loop -> button value switching
+SAM3X/ARDUINO-SAM3-SPI.elf	Read	loop->0x00803A2	loop->low-level MMIO read in SPIClass::transfer
+	Write	loop->0x008039A	loop->low-level MMIO write in SPIClass::transfer
+SAM3X/SAM3-RIOT-SPI.elf	Read	0x80CD4	spi_transfer_bytes MMIO read bb
+	Write	0x80CDE	spi_transfer_bytes MMIO write bb
+SAM3X/ARDUINO-SAM3-GPIO_INT.elf	Callback/IRQ	_Z5blinkv	Invocation of blink callback function. Symbol known to IDA as "callback"
+SAM3X/SAM3-RIOT-TIMER.elf	Callback/IRQ	timerCB	timer callback. Symbol known to IDA as "cb"
+	Read	0x00080AB8->0x80AD4	main loop timer_read call -> main loop end
+SAM3X/SAM3-RIOT-USART-Read.elf	Read	_pop	Successful read from receive buffer (which gets filled in IRQ handler)
+SAM3X/SAM3-RIOT-USART.elf	Write	0x8098C->0x80B98	Successful uart_write MMIO -> main loop end
+SAM3X/ARDUINO-SAM3-ADC.elf	Read	adc_get_latest_value	Invocation of low-level read function
+SAM3X/ARDUINO-SAM3-I2C.elf	Read	0x80228	TwoWire::read MMIO
+	Write	0x0080284	TwoWire::write success
+SAM3X/SAM3-RIOT-PWM.elf	Write	0x00080BF2	pwm_set success case
+SAM3X/SAM3-RIOT-GPIO_INT.elf	Callback/IRQ	gpioCB	Invocation of callback function. Symbol known to IDA as "cb"
+SAM3X/ARDUINO-SAM3-PWM.elf	Write	loop->0x8122C	main loop -> PWM mode output writing PWMC_SetDutyCycle success
+SAM3X/ARDUINO-SAM3-Serial.elf	Read	0x0080B90->0x80CB4	IRQ handler pushing into rx buf -> UARTClass::read rx buffer data pop
+	Write	0x80E3E	UARTClass::IrqHandler tx buffer pop and output MMIO write
+SAM3X/SAM3-RIOT-DAC.elf	Write	main->0x0080B72	main->dac_set success case

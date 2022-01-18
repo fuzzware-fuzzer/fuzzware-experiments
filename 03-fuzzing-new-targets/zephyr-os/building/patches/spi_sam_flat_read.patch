@@ -1,0 +1,40 @@
+diff --git a/drivers/spi/spi_sam.c b/drivers/spi/spi_sam.c
+index 30c46ef77a..27ea8c2ff3 100644
+--- a/drivers/spi/spi_sam.c
++++ b/drivers/spi/spi_sam.c
+@@ -373,25 +373,20 @@ static int spi_sam_transceive(const struct device *dev,
+ 		goto done;
+ 	}
+ 
+-	spi_context_cs_control(&data->ctx, true);
++	for(int i = 0; i < rx_bufs->count; ++i) {
++		struct spi_buf *rx_buf = &rx_bufs->buffers[i];
+ 
+-	/* This driver special cases the common send only, receive
+-	 * only, and transmit then receive operations.	This special
+-	 * casing is 4x faster than the spi_context() routines
+-	 * and allows the transmit and receive to be interleaved.
+-	 */
+-	if (spi_sam_is_regular(tx_bufs, rx_bufs)) {
+-		spi_sam_fast_transceive(dev, config, tx_bufs, rx_bufs);
+-	} else {
+-		spi_context_buffers_setup(&data->ctx, tx_bufs, rx_bufs, 1);
++		// Need to skip bytes if rx_buf is null, ignoring
++		if(rx_buf == NULL) {
++			continue;
++		}
+ 
+-		do {
+-			spi_sam_shift_master(regs, data);
+-		} while (spi_sam_transfer_ongoing(data));
++		// Read full buffer length
++		for (int j = 0; j < rx_buf->len; ++j) {
++			((uint8_t *)rx_buf->buf)[j] = regs->SPI_RDR;
++		}
+ 	}
+ 
+-	spi_context_cs_control(&data->ctx, false);
+-
+ done:
+ 	spi_context_release(&data->ctx, err);
+ 	return err;

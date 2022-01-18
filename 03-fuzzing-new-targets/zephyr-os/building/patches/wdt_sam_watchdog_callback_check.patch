@@ -1,0 +1,17 @@
+diff --git a/drivers/watchdog/wdt_sam.c b/drivers/watchdog/wdt_sam.c
+index 44866ee3f2..bb469a0b53 100644
+--- a/drivers/watchdog/wdt_sam.c
++++ b/drivers/watchdog/wdt_sam.c
+@@ -55,7 +55,10 @@ static void wdt_sam_isr(const struct device *dev)
+ 	/* Clear status bit to acknowledge interrupt by dummy read. */
+ 	wdt_sr = wdt->WDT_SR;
+ 
+-	data->cb(dev, 0);
++	// Fuzzware: only invoke callback if it is set
++	if(data->cb) {
++		data->cb(dev, 0);
++	}
+ }
+ 
+ /**
+ 

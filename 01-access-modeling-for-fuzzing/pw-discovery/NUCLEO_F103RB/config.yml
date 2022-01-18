@@ -1,0 +1,16 @@
+memory_map:
+  nvic: {base_addr:  0xe0000000, size: 0x10000000, permissions: rw-}
+  irq_ret: {base_addr: 0xfffff000, size: 0x1000, permissions: --x}
+  mmio: {base_addr:  0x40000000, size: 0x20000000, permissions: rw-}
+  ram:  {base_addr:  0x20000000, size: 0x00100000, permissions: rw-}
+
+  text:
+    base_addr: 0x8000000
+    file: ./basic_exercises.bin
+    permissions: r-x
+    size: 0x800000
+    is_entry: True
+
+use_nvic: false
+use_timers: false
+use_systick: false

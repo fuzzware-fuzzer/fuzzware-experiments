@@ -1,0 +1,41 @@
+#include:
+#    - ./syms.yml
+
+interrupt_triggers:
+  trigger:
+    every_nth_tick: 0x3e8
+    fuzz_mode: round_robin
+
+memory_map:
+  mmio: {base_addr:  0x40000000, size: 0x20000000, permissions: rw-}
+  nvic: {base_addr:  0xe0000000, size: 0x10000000, permissions: rw-}
+  irq_ret: {base_addr: 0xfffff000, size: 0x1000, permissions: --x}
+
+  zero:
+    base_addr: 0x00000000
+    permissions: rw-
+    size: 0x1000
+  ram:
+    base_addr: 0x20000000
+    permissions: rw-
+    size: 0x30000
+  flash:
+    base_addr: 0x8000000
+    permissions: rw-
+    size: 0xc000
+  text:
+    base_addr: 0x800c080
+    file: uEmu.uTasker_MODBUS.bin
+    permissions: r-x
+    size: 0xB000
+
+# DMA Support Configs
+mmio_models:
+  passthrough:
+    # DMA pointer holder locations (in uEmu, this is encoded as a custom data register region)
+    eth_dmabuf_1: 
+      addr: 0x4002900C
+      pc: 0xffffffff
+    eth_dmabuf_2:
+      addr: 0x4002904C
+      pc: 0xffffffff

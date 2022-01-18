@@ -1,0 +1,23 @@
+include:
+  - ./zephyr_exits.yml
+  - ./zephyr_skips.yml
+  # Disabled: Additional tracing (edit as needed)
+  # - ./zephyr_debug.yml
+
+# We let the fuzzer choose an interrupt to trigger whenever the firmware is idle
+# The default behavior would be to trigger an interrupt every 1000 basic blocks
+interrupt_triggers:
+  idle_interrupt:
+    fuzz_mode: fuzzed
+    addr: arch_cpu_idle
+
+## More commented-out configuration parameters to play around with and focus fuzzing further
+
+# Performance increase: Deactivate watchdog timer to decrease noise (and make one of the patches unnecessary)
+#disabled_irqs:
+#  # Watchdog timer interrupt (if this is disabled, the wdt patch is also no longer required)
+#  - 20
+#  # SAM GPIO interrupts
+#  - 26
+#  - 27
+#  - 28

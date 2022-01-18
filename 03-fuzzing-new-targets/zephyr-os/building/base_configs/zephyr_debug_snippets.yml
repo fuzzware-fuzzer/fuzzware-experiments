@@ -1,0 +1,48 @@
+# Optional Configs for manual analysis and triaging (SLOW, don't use during fuzzing)
+# We can use these to get a better understanding of firmware execution
+handlers:
+  # Completely replace stdio functions (will patch a return as function stub)
+  log_0: fuzzware_harness.user_hooks.generic.stdio.puts
+  log_1: fuzzware_harness.user_hooks.generic.stdio.printf
+  log_2: fuzzware_harness.user_hooks.generic.stdio.printf
+  log_3: fuzzware_harness.user_hooks.generic.stdio.printf
+  log_n: fuzzware_harness.user_hooks.generic.stdio.printf
+  printk: fuzzware_harness.user_hooks.generic.stdio.printf
+
+  # Tracing (without function replacement)
+  # These add some tracing info, don't actually replace function execution in firmware
+  ## Example 1: Concurrency issues
+  z_impl_k_sem_init:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_3
+  z_impl_k_sem_take:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+  z_impl_k_sem_give:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+
+  ## Example 2: Netbuf-internal issues
+  net_buf_unref:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+  net_buf_ref:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+  net_buf_get:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+  net_buf_put:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_2
+
+  ## Example 3: Bluetooth functions
+  bt_send:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+  bt_spi_send:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_1
+  bt_hci_cmd_send_sync:
+    do_return: false
+    handler: fuzzware_harness.user_hooks.debug.print_args_3

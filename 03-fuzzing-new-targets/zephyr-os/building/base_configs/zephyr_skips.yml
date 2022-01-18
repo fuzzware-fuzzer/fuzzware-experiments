@@ -1,0 +1,15 @@
+# Optional config: Make noisy and typical "anti-fuzzing" functions return
+# immediately to avoid consuming unnecessary computation resources.
+handlers:
+  z_tick_sleep: 
+  printk:
+  shell_fprintf_fmt:
+  z_vprintk:
+  z_impl_k_busy_wait:
+  z_impl_k_sleep:
+  arch_system_halt:
+  log_0:
+  log_1:
+  log_2:
+  log_3:
+  log_n:

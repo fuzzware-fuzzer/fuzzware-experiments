@@ -1,0 +1,14 @@
+#!/bin/bash
+DIR="$(dirname "$(readlink -f "$0")")"
+
+export CVENUM=2021-3319
+export BASE_COMMIT=a980762f70d7048825e6ce9e42ceb6b5f87a5e44
+export FIX_COMMITS=6f1ab93c66c59cf267bb2b974cf76a3b9b306e32
+
+export PATCHES="fix-CVE-2021-3323.patch"
+
+export BOARD=sam4s_xplained
+export SHIELD=atmel_rf2xx_xplained
+export ZEPHYR_VERSION=2.4.0
+
+"$DIR/docker_build_802154_sample.sh"

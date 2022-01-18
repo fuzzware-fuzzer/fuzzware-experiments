@@ -1,0 +1,7 @@
+# Optional config: We exit immediately on shutdown functions to reduce 
+# the amount of time the fuzzer will spend idling in panic loops.
+exit_at:
+  z_fatal_error:
+  arch_system_halt:
+  z_do_kernel_oops:
+  quit:

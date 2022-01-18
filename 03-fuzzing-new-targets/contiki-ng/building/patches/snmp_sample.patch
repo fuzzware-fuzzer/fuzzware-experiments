@@ -1,0 +1,63 @@
+diff --git a/examples/snmp-server/Makefile b/examples/snmp-server/Makefile
+index c2e7b8952..6da837730 100644
+--- a/examples/snmp-server/Makefile
++++ b/examples/snmp-server/Makefile
+@@ -1,6 +1,14 @@
+ CONTIKI_PROJECT = snmp-server 
+ all: $(CONTIKI_PROJECT)
+ 
++MAKE_MAC = MAKE_MAC_NULLMAC
++MAKE_NET = MAKE_NET_NULLNET
++
++CFLAGS += -DNETSTACK_CONF_NETWORK=nullnet_driver
++MODULES += $(CONTIKI_NG_NET_DIR)/ipv6
++CFLAGS += -DNETSTACK_CONF_WITH_IPV6=1
++
++CFLAGS += -g
+ MODULES += os/net/app-layer/snmp
+ 
+ MODULES_REL += ./resources
+diff --git a/examples/snmp-server/project-conf.h b/examples/snmp-server/project-conf.h
+index 724e89485..04b8a957c 100644
+--- a/examples/snmp-server/project-conf.h
++++ b/examples/snmp-server/project-conf.h
+@@ -31,3 +31,5 @@
+ /*---------------------------------------------------------------------------*/
+ 
+ #define LOG_CONF_LEVEL_SNMP     LOG_LEVEL_DBG
++
++#define PACKETBUF_CONF_SIZE UIP_BUFSIZE
+\ No newline at end of file
+diff --git a/examples/snmp-server/snmp-server.c b/examples/snmp-server/snmp-server.c
+index dbc638f05..fe41108a1 100644
+--- a/examples/snmp-server/snmp-server.c
++++ b/examples/snmp-server/snmp-server.c
+@@ -48,6 +48,19 @@ extern snmp_mib_resource_t
+ 
+ /*---------------------------------------------------------------------------*/
+ 
++#include "net/nullnet/nullnet.h"
++#include "snmp-engine.h"
++void nullnet_input_callback_snmp(const void *data, uint16_t len, const linkaddr_t *src, const linkaddr_t *dest) {
++    static unsigned char packet[SNMP_MAX_PACKET_SIZE];
++    unsigned char *packet_end;
++    static uint32_t packet_len;
++
++    packet_end = packet + sizeof(packet) - 1;
++    packet_len = 0;
++
++    snmp_engine((void *)data, len, packet_end, &packet_len);
++}
++
+ PROCESS(snmp_server_process, "SNMP Server");
+ 
+ /*---------------------------------------------------------------------------*/
+@@ -56,6 +69,8 @@ PROCESS_THREAD(snmp_server_process, ev, data)
+ 
+   PROCESS_BEGIN();
+ 
++  nullnet_set_input_callback(nullnet_input_callback_snmp);
++
+   snmp_api_add_resource(&sysDescr);
+   snmp_api_add_resource(&sysObjectID);
+   snmp_api_add_resource(&sysUpTime);

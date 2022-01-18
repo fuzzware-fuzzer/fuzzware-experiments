@@ -1,0 +1,13 @@
+diff --git a/subsys/bluetooth/host/hci_core.c b/subsys/bluetooth/host/hci_core.c
+index b173de8e5b..63fb9a9641 100644
+--- a/subsys/bluetooth/host/hci_core.c
++++ b/subsys/bluetooth/host/hci_core.c
+@@ -56,7 +56,7 @@
+ #define RPA_TIMEOUT_MS       (CONFIG_BT_RPA_TIMEOUT * MSEC_PER_SEC)
+ #define RPA_TIMEOUT          K_MSEC(RPA_TIMEOUT_MS)
+ 
+-#define HCI_CMD_TIMEOUT      K_SECONDS(10)
++#define HCI_CMD_TIMEOUT      K_FOREVER
+ 
+ /* Stacks for the threads */
+ #if !defined(CONFIG_BT_RECV_IS_RX_THREAD)

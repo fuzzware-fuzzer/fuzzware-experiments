@@ -1,0 +1,16 @@
+diff --git a/subsys/net/l2/ieee802154/ieee802154_fragment.c b/subsys/net/l2/ieee802154/ieee802154_fragment.c
+index 5a16f9b185..d811396369 100644
+--- a/subsys/net/l2/ieee802154/ieee802154_fragment.c
++++ b/subsys/net/l2/ieee802154/ieee802154_fragment.c
+@@ -319,8 +319,9 @@ static inline struct frag_cache *set_reass_cache(struct net_pkt *pkt,
+ 		cache[i].tag = tag;
+ 		cache[i].used = true;
+ 
+-		k_delayed_work_init(&cache[i].timer, reass_timeout);
+-		k_delayed_work_submit(&cache[i].timer, FRAG_REASSEMBLY_TIMEOUT);
++		// Fuzzware: make reass cache not expire
++		// k_delayed_work_init(&cache[i].timer, reass_timeout);
++		// k_delayed_work_submit(&cache[i].timer, FRAG_REASSEMBLY_TIMEOUT);
+ 		return &cache[i];
+ 	}
+ 
