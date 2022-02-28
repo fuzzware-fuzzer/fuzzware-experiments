@@ -16,14 +16,14 @@ The layout of this directory maps subdirectories to the respective experiments w
 | [04-crash-analysis](04-crash-analysis)                                                         | 6.4 | Crashes triggered across experiments                    | Crash root causes (Table 3). |
 
 # Running the Experiments
-As it is hard to predict the type compute infrastructure that is available to the user (one very beefy instance, many small instances, or anything in between), we supply helper scripts that allow parallelizing execution in different setups.
+As it is hard to predict the type of compute infrastructure that is available to the user (one very beefy instance, many small instances, or anything in between), we supply helper scripts that allow parallelizing execution in different setups.
 
 ## Manual Experimentation
 If you would like to play around with specific targets by hand, fuzzing a target in isolation can be done using the `fuzzware pipeline` and `fuzzware genstats` utilities.
 
 As an example, to manually fuzz test the `CNC` target which was originally introduced by the authors of P2IM, run:
 ```
-$ fuzzware pipeline 02-comparison-with-state-of-the-art/P2IM/CNC
+$ fuzzware pipeline 02-comparison-with-state-of-the-art/P2IM/CNC --run-for 24:00:00
 ```
 This will start Fuzzware with a single fuzzing instance and default parameters, and place a `fuzzware-project` directory in `02-comparison-with-state-of-the-art/P2IM/CNC/fuzzware-project`.
 
