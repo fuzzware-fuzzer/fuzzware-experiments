@@ -16,9 +16,11 @@ import sys
 import os
 from fuzzware_harness.util import load_config_deep, parse_symbols
 from fuzzware_harness.tracing.serialization import parse_bbl_trace
-from fuzzware_pipeline.util.eval_utils import find_covering_trace_paths, find_trace_paths_covering_all_bbs
+from fuzzware_pipeline.util.eval_utils import find_traces_covering_all
 from fuzzware_pipeline.naming_conventions import trace_paths_for_trace, input_for_trace_path
 import subprocess
+
+NUM_TRACE_ALL = 999999
 
 def parse_groundtruth_csv(file_path):
     entries = []
@@ -90,8 +92,8 @@ def main(file_path):
             print(f"Got ordered basic block candidates: {bbs}")
             if len(bbs) == 1:
                 # single one, use bb set
-                _, not_found = find_covering_trace_paths(proj_dir, bbs)
-                if not not_found:
+                trace_paths = find_traces_covering_all(proj_dir, bbs, find_num=NUM_TRACE_ALL, only_last_maindir=False)
+                if trace_paths:
                     successes.append(elf_name)
                     found = True
                     break
@@ -99,8 +101,8 @@ def main(file_path):
                     print("[-] Did not find for single-bb")
             else:
                 # multiple BBs, check ordered occurrence in full basic block traces
-                trace_set_paths = find_trace_paths_covering_all_bbs(proj_dir, bbs)
-                
+                trace_set_paths = find_traces_covering_all(proj_dir, bbs, find_num=NUM_TRACE_ALL, only_last_maindir=False)
+
                 # look for a trace that booted
                 for bbl_set_trace_path in trace_set_paths:
                     bbl_trace_path = trace_paths_for_trace(bbl_set_trace_path)[0]
