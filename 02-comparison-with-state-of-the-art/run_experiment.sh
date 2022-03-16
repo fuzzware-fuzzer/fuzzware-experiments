@@ -43,4 +43,4 @@ if [ $SKIP_NON_MODELING -ne 1 ]; then
     $DIR/run_targets.sh 0 $EXPERIMENT_REPETITION_COUNT $NUM_PARALLEL_INSTANCES $FUZZING_RUNTIME $TARGET_LIST
 fi
 
-$DIR/run_cov_aggregation.py
+$DIR/run_metric_aggregation.py
