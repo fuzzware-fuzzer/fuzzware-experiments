@@ -20,11 +20,19 @@ if [ $num_available_cores -gt 1 ] && [ $num_procs -gt $(( $num_available_cores /
     exit 1;
 fi
 
+if [ $(( 4 * $num_procs )) -gt $(cat /proc/sys/fs/inotify/max_user_instances) ]; then
+    echo "[ERROR] inotify limits too low for requested number of fuzzing instances (did you set limits?)"
+    exit 1
+fi
+
 FUZZING_RUNTIME="00:15:00"
 
 export AFL_SKIP_CPUFREQ=1
-( for f in `find $DIR -iname '*.elf'`; do echo $(dirname $f); done ) | xargs -I{} --max-procs $num_procs -- \
-    fuzzware pipeline --run-for=$FUZZING_RUNTIME {};
+( for f in `find $DIR -iname '*.elf'`; do
+    # Skip possible copies within already-existing project directories
+    if [ "$(basename $(dirname $f))" != "data" ]; then
+       echo "fuzzware pipeline --run-for=$FUZZING_RUNTIME $(dirname $f)";
+    fi
+done ) | xargs -I{} --max-procs $num_procs -- bash -c "{}"
 
-( for p in `find $DIR -name fuzzware-project`; do echo $p; done ) | xargs -I{} --max-procs $(( $num_procs * 2 )) -- \
-    fuzzware gentraces -p {} --main-dirs all bb
+exit 0
