@@ -20,6 +20,8 @@ from fuzzware_pipeline.util.eval_utils import find_traces_covering_all
 from fuzzware_pipeline.naming_conventions import trace_paths_for_trace, input_for_trace_path
 import subprocess
 
+DIR = os.path.dirname(os.path.realpath(__file__))
+
 NUM_TRACE_ALL = 999999
 
 def parse_groundtruth_csv(file_path):
@@ -74,7 +76,7 @@ def main(file_path):
     for elf_path, test_type, bb_text, comment in entries:
         print("elf_path:", elf_path)
         elf_name = os.path.basename(elf_path)
-        target_dir = elf_path.split(".")[0]
+        target_dir = os.path.join(DIR, elf_path.split(".")[0])
 
         config_path = os.path.join(target_dir, "config.yml")
         proj_dir = os.path.join(target_dir, "fuzzware-project")
