@@ -3,7 +3,7 @@
 
 This script allows installing multiple Ubuntu cloud instances.
 
-We performed our latest tests on 18.04.6 LTS, however 20.04 has also previously worked for us.
+We performed our original tests on Ubuntu 18.04.6 LTS, however 20.04 has also previously worked for us.
 """
 import argparse
 import subprocess
@@ -30,7 +30,7 @@ DEFAULT_HOST_START_INDEX=1
 DEFAULT_GIT_REPO_SITE="github.com"
 DEFAULT_GIT_REPO_OWNER="fuzzware-fuzzer"
 # Latest commit, but made explicit for artifact eval purposes.
-DEFAULT_FUZZWARE_COMMIT="79606d873922f98774b0f6ff534b566d9f289363"
+DEFAULT_FUZZWARE_COMMIT="ff751411d772a1b4a2f6503a1a5e60d53502c89d"
 def main():
     parser = argparse.ArgumentParser(description="Ubuntu Cloud Hosts Install Helper")
     parser.add_argument('--fuzzware-version', type=str, default=DEFAULT_FUZZWARE_COMMIT, help="(optional) Install a specific version of Fuzzware. Specify a tag name or fuzzware repo commit hash. The latest version of Fuzzware should cleanly replay crashing POC at the time of writing, but later versions may change the emulator behavior such that inputs replay slightly differently, which means crashing POC inputs may no longer reproduce.")
