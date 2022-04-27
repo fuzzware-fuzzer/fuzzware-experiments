@@ -52,7 +52,7 @@ if [ $USE_DOCKER_INSTALL -eq 1 ]; then
     ssh "worker@$HOST" "cd ~/fuzzware && ./build_docker.sh"
 else
     # Local install
-    ssh "root@$HOST" "apt-get install -y python3-pip automake redis cmake clang"
+    ssh "root@$HOST" "apt-get install -y python3-pip automake redis cmake clang gnuplot"
     ssh "root@$HOST" "pip3 install virtualenv virtualenvwrapper"
     ssh "worker@$HOST" 'grep -q VIRTUALENVWRAPPER_PYTHON ~/.bashrc || (echo -e "\nexport WORKON_HOME=~/.virtualenvs\nexport VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3\nsource /usr/local/bin/virtualenvwrapper.sh\n" >> ~/.bashrc)'
     ssh "worker@$HOST" 'cd ~/fuzzware && bash ./install_local.sh'
