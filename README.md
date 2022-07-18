@@ -18,6 +18,8 @@ The layout of this directory maps subdirectories to the respective experiments w
 # Running the Experiments
 As it is hard to predict the type of compute infrastructure that is available to the user (one very beefy instance, many small instances, or anything in between), we supply helper scripts that allow parallelizing execution in different setups.
 
+> **Docker Image**: A docker image is available to run Fuzzware in a pre-built environment. This may become necessary in case dependencies make building Fuzzware challenging for a specific version of the source code. The image alongside some documentation on how to use the image can be found [here on dockerhub](https://hub.docker.com/r/fuzzware/fuzzware).
+
 ## Manual Experimentation
 If you would like to play around with specific targets by hand, fuzzing a target in isolation can be done using the `fuzzware pipeline` and `fuzzware genstats` utilities.
 
