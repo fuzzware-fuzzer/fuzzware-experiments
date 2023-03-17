@@ -9,6 +9,26 @@ fuzzware genstats crashcontexts
 ```
 A file containing different crash contexts can afterwards be found in `fuzzware-project-*/stats/crash_contexts.txt`. This file should already be generated for each project for the synthetic samples ([pw-discovery](../01-access-modeling-for-fuzzing/pw-discovery) and [P2IM / uEmu](../02-comparison-with-state-of-the-art) in case you are running the experiments using the provided experiment kickoff scripts.
 
+> **Note**
+> To replay the inputs in this directory, you may need to use the initial version of `fuzzware-emulator` and rebuild fuzzware.
+> For example:
+> ```bash
+> git clone https://github.com/fuzzware-fuzzer/fuzzware-experiments
+> git clone https://github.com/fuzzware-fuzzer/fuzzware fuzzware-crash-replay
+> cd fuzzware-crash-replay
+> ./update.sh
+> git --git-dir emulator/.git checkout 075dbb5
+> ./build_docker.sh fuzzware-crash-replay
+> ./run_docker.sh -r fuzzware-crash-replay -d ../fuzzware-experiments
+> ```
+> Then within docker
+> ```bash
+> cd 04-crash-analysis/01
+> ./run.sh
+> cd ~/fuzzware/targets/03-fuzzing-new-targets/zephyr-os/prebuilt_samples/CVE-2021-3319/POC
+> ./run.sh
+> ```
+
 ## Crash Overview
 The following table shows an overview of the crashes which were produced by Fuzzware and which we identified as unique.
 
